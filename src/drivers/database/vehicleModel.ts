@@ -61,7 +61,7 @@ export class DynamoVehicleRepository implements VehicleRepository {
         return result.Attributes as Vehicle
     }
 
-    async listByStatus(isAvailable: boolean): Promise<Vehicle[]> {
+    async filterByAvailability(isAvailable: boolean): Promise<Vehicle[]> {
         const params = {
             TableName: TABLE_NAME,
             FilterExpression: 'isAvailable = :isAvailable',
