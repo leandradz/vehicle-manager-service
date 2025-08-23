@@ -34,4 +34,10 @@ export class VehicleUseCase {
         }
         return updatedVehicle
     }
+
+    async listVehiclesOrderedByPrice(
+        isAvailable: boolean = true
+    ): Promise<Vehicle[]> {
+        return await this.vehicleRepository.filterByAvailability(isAvailable)
+    }
 }
