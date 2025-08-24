@@ -19,7 +19,7 @@ export class DynamoVehicleRepository implements VehicleRepository {
         const vehicleData = {
             ...vehicle,
             id: crypto.randomUUID(),
-            isAvailable: false,
+            isAvailable: true,
         }
 
         const params = {
