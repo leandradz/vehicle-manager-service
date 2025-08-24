@@ -12,6 +12,7 @@ export class VehicleController {
     setupRoutes() {
         this.routes.post('/', this.create.bind(this))
         this.routes.put('/:vehicleId', this.update.bind(this))
+        this.routes.get('/list', this.list.bind(this))
         this.routes.get('/:vehicleId', this.findById.bind(this))
         return this.routes
     }
@@ -36,9 +37,8 @@ export class VehicleController {
                 data.fabricationDate,
                 data.color,
                 data.price,
-                data.isAvailable ?? false,
-                data.clientDocument ?? null,
-                data.saleDate ?? null
+                data.isAvailable ?? true,
+                data.saleId ?? null
             )
             const result = await this.VehicleUseCase.create(vehicle)
             res.status(201).json(result)
@@ -64,8 +64,7 @@ export class VehicleController {
                 newData.color ?? vehicleFound.color,
                 newData.price ?? vehicleFound.price,
                 newData.isAvailable ?? vehicleFound.isAvailable,
-                newData.clientDocument ?? vehicleFound.clientDocument,
-                newData.saleDate ?? vehicleFound.saleDate
+                newData.saleId ?? vehicleFound.saleId
             )
             const result = await this.VehicleUseCase.update(updatedVehicle)
             res.status(200).json(result)
@@ -88,6 +87,20 @@ export class VehicleController {
         } catch (error) {
             console.log('Failed to search vehicle', error)
             res.status(500).json({ error: 'Failed to search vehicle' })
+        }
+    }
+
+    public async list(req: Request, res: Response): Promise<void> {
+        try {
+            const { isAvailable } = req.query
+            const vehicles =
+                await this.VehicleUseCase.listVehiclesOrderedByPrice(
+                    isAvailable === 'true'
+                )
+            res.status(200).json(vehicles)
+        } catch (error) {
+            console.log('Failed to search vehicles', error)
+            res.status(500).json({ error: 'Failed to search vehicles' })
         }
     }
 }
