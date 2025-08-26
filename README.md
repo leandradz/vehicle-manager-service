@@ -1,14 +1,13 @@
-# TRABALHO SUB TECH CHALLENGE CURSO SOAT – PÓSTECH
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=leandradz_vehicle-manager-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=leandradz_vehicle-manager-service)
 
-[Apresentação FIAP - Reposição Fase 4]()
+# Gerenciador de Veículos
+
+[Vídeo de Apresentação]()
 
 ## Descrição do Projeto
 
 Uma empresa de revenda de veículos automotores nos contratou pois quer implantar uma
-plataforma que funcione na internet, sendo assim, temos que criar a plataforma. O time de UX já
-está criando os designs, e ficou sob sua responsabilidade criar a API, para que posteriormente o
-time de frontend integre a solução. O desenho da solução envolve as seguintes necessidades do
-negócio.
+plataforma que funcione na internet, sendo assim, temos que criar a plataforma. O time de UX já está criando os designs, e ficou sob sua responsabilidade criar a API, para que posteriormente o time de frontend integre a solução. O desenho da solução envolve as seguintes necessidades do negócio.
 
 ## Estrutura do Projeto
 
@@ -16,35 +15,44 @@ negócio.
 -   **APIs Implementadas**:
     • Cadastrar um veículo para venda (Marca, modelo, ano, cor, preço);
     • Editar os dados do veículo;
-    • Efetuar a venda de um veículo (CPF da pessoa que comprou e data da venda);
-    • Disponibilizar um endpoint (webhook) para que a entidade que processa o pagamento
-    consiga, a partir do código do pagamento, informar se o pagamento foi efetuado ou
-    cancelado;
-    • Listagem de veículos à venda, ordenada por preço, do mais barato para o mais caro;
+    • Listagem de veículos à venda, ordenada por preço, do mais barato para o mais caro.
     • Listagem de veículos vendidos, ordenada por preço, do mais barato para o mais caro.
 -   **Banco de Dados**: DynamoDB (simulado localmente com LocalStack).
 
 ## Como Rodar o Projeto Localmente
 
-Para iniciar o projeto, você precisará ter o Docker e o Docker Compose instalados. Siga os passos abaixo:
+Para rodar testar a aplicação completa, você precisará clonar e iniciar também o repositório vehicle-orchestration, além do vehicle-sales-service. Siga os passos:
 
-1. Clone o repositório:
-
-<!-- ```bash
-   git clone git@github.com:
-   cd vehicle-manager-service
-``` -->
-
-2. Construa e inicie os containers:
+1. Clone ambos os repositórios:
 
 ```bash
-    docker run -d -p 4566:4566 -e SERVICES=dynamodb --name localstack localstack/localstack:latest
-
-    docker-compose up --build
+git clone https://github.com/leandradz/vehicle-orchestration.git
+git clone https://github.com/leandradz/vehicle-manager-service.git
+git clone https://github.com/leandradz/vehicle-sales-service.git
 ```
 
-3. Acesse a aplicação em http://localhost:3002
+2. Inicie o vehicle-orchestration:
 
-## Documentação da API
+```bash
+cd vehicle-orchestration
+docker-compose up -d ngrok
+bash set-ngrok-webhook.sh
+```
 
-A documentação das APIs está disponível via Swagger. Após iniciar o projeto, você pode acessá-la em http://localhost:3002/api-docs.
+3. Acesse as aplicações:
+- vehicle-manager-service: http://localhost:3002
+- vehicle-sales-service: http://localhost:3001
+
+## Observações
+- Sempre execute o script `set-ngrok-webhook.sh` após subir o ngrok para garantir que o endpoint do webhook esteja atualizado.
+- Para reiniciar todos os serviços com o novo endpoint, basta rodar novamente o script.
+
+## Documentação
+- Acesse a documentação das APIs via Swagger:
+  - [Vehicle Manager](http://localhost:3002/api-docs)
+  - [Vehicle Sales](http://localhost:3001/api-docs)
+
+## Diagrama dos fluxos presentes no Manager Service
+
+<img src='./assets/fiap-cadastrar-veiculo.png'/>
+<img src='./assets/fiap-listagem-veiculo.png'/>
