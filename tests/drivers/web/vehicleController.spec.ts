@@ -1,5 +1,4 @@
 import { VehicleController } from '../../../src/drivers/web/vehicleController'
-import { Router } from 'express'
 import { VehicleUseCase } from '../../../src/useCases/vehicle'
 
 const mockUseCase = {
