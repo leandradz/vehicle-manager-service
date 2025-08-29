@@ -55,4 +55,4 @@ bash set-ngrok-webhook.sh
 ## Diagrama dos fluxos presentes no Manager Service
 
 <img src='./assets/fiap-cadastrar-veiculo.png'/>
-<img src='./assets/fiap-listagem-veiculo.png'/>
+<img src='./assets/fiap-listagem-veiculos.png'/>
