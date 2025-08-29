@@ -2,6 +2,99 @@ import { Router, Request, Response } from 'express'
 import { VehicleUseCase } from '../../useCases/vehicle'
 import { Vehicle } from '../../domain/entities/vehicle'
 
+/**
+ * @swagger
+ * /vehicles:
+ *   post:
+ *     summary: Cria um novo veículo
+ *     tags:
+ *       - Vehicles
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Vehicle'
+ *     responses:
+ *       201:
+ *         description: Veículo criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vehicle'
+ *       500:
+ *         description: Erro ao criar veículo
+ * /vehicles/{vehicleId}:
+ *   put:
+ *     summary: Atualiza um veículo existente
+ *     tags:
+ *       - Vehicles
+ *     parameters:
+ *       - in: path
+ *         name: vehicleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Vehicle'
+ *     responses:
+ *       200:
+ *         description: Veículo atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vehicle'
+ *       500:
+ *         description: Erro ao atualizar veículo
+ *   get:
+ *     summary: Busca veículo por ID
+ *     tags:
+ *       - Vehicles
+ *     parameters:
+ *       - in: path
+ *         name: vehicleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Veículo encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vehicle'
+ *       404:
+ *         description: Veículo não encontrado
+ *       500:
+ *         description: Erro ao buscar veículo
+ * /vehicles/list:
+ *   get:
+ *     summary: Lista veículos ordenados por preço
+ *     tags:
+ *       - Vehicles
+ *     parameters:
+ *       - in: query
+ *         name: isAvailable
+ *         required: false
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: Lista de veículos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Vehicle'
+ *       500:
+ *         description: Erro ao buscar veículos
+ */
+
 export class VehicleController {
     private readonly routes: Router
 
@@ -10,114 +103,9 @@ export class VehicleController {
     }
 
     setupRoutes() {
-        /**
-         * @swagger
-         * /:
-         *   post:
-         *     summary: Cria um novo veículo
-         *     tags:
-         *       - Vehicles
-         *     requestBody:
-         *       required: true
-         *       content:
-         *         application/json:
-         *           schema:
-         *             $ref: '#/components/schemas/Vehicle'
-         *     responses:
-         *       201:
-         *         description: Veículo criado com sucesso
-         *         content:
-         *           application/json:
-         *             schema:
-         *               $ref: '#/components/schemas/Vehicle'
-         *       500:
-         *         description: Erro ao criar veículo
-         */
         this.routes.post('/', this.create.bind(this))
-
-        /**
-         * @swagger
-         * /{vehicleId}:
-         *   put:
-         *     summary: Atualiza um veículo existente
-         *     tags:
-         *       - Vehicles
-         *     parameters:
-         *       - in: path
-         *         name: vehicleId
-         *         required: true
-         *         schema:
-         *           type: string
-         *     requestBody:
-         *       required: true
-         *       content:
-         *         application/json:
-         *           schema:
-         *             $ref: '#/components/schemas/Vehicle'
-         *     responses:
-         *       200:
-         *         description: Veículo atualizado com sucesso
-         *         content:
-         *           application/json:
-         *             schema:
-         *               $ref: '#/components/schemas/Vehicle'
-         *       500:
-         *         description: Erro ao atualizar veículo
-         */
         this.routes.put('/:vehicleId', this.update.bind(this))
-
-        /**
-         * @swagger
-         * /list:
-         *   get:
-         *     summary: Lista veículos ordenados por preço
-         *     tags:
-         *       - Vehicles
-         *     parameters:
-         *       - in: query
-         *         name: isAvailable
-         *         required: false
-         *         schema:
-         *           type: boolean
-         *     responses:
-         *       200:
-         *         description: Lista de veículos
-         *         content:
-         *           application/json:
-         *             schema:
-         *               type: array
-         *               items:
-         *                 $ref: '#/components/schemas/Vehicle'
-         *       500:
-         *         description: Erro ao buscar veículos
-         */
         this.routes.get('/list', this.list.bind(this))
-
-        /**
-         * @swagger
-         * /{vehicleId}:
-         *   get:
-         *     summary: Busca veículo por ID
-         *     tags:
-         *       - Vehicles
-         *     parameters:
-         *       - in: path
-         *         name: vehicleId
-         *         required: true
-         *         schema:
-         *           type: string
-         *     responses:
-         *       200:
-         *         description: Veículo encontrado
-         *         content:
-         *           application/json:
-         *             schema:
-         *               $ref: '#/components/schemas/Vehicle'
-         *       404:
-         *         description: Veículo não encontrado
-         *       500:
-         *         description: Erro ao buscar veículo
-         */
         this.routes.get('/:vehicleId', this.findById.bind(this))
         return this.routes
     }
